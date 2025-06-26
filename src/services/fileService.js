@@ -23,7 +23,7 @@ export class FileService{
             );
 
         } catch (error) {
-            console.error('Error while uploading file:', error);
+            console.error('Appwrite service :: uploadFile :: error', error);
             return false ;
         }
     }
@@ -37,17 +37,25 @@ export class FileService{
 
             return true ;
         }catch(error){
-            console.error('Error while deleting file:', error);
+            console.error('Appwrite service :: deleteFile :: error', error);
             return false ;
         }
     }
 
-    getFilePreview( fileId ) {
-        return this.storage.getFilePreview(
-            conf.appwriteBucketId,
-            fileId
-        ).href; 
-        //getFilePreview method returns an URL object. You need to access the href property of that object to get the actual URL string.
+    getFilePreview(fileId) {
+        // Files in the public directory are served at the root path, so use '/placeholder.png'
+        if (!fileId) {
+            return '/placeholder.png';
+        }
+        try {
+            return this.storage.getFilePreview(conf.appwriteBucketId, fileId).href;
+        } catch (error) {
+            console.warn('Appwrite service :: getFilePreview :: error. Check bucket permissions.', error);
+            return '/placeholder.png';
+        }
+        //getFilePreview method returns an URL object. 
+        // You need to access the href property of that 
+        // object to get the actual URL string.
     }
 }
 
