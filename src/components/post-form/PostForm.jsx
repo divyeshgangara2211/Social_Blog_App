@@ -1,4 +1,4 @@
-import React , { useCallback } from 'react';
+import React , { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button , Input , RTE , Select } from '../index.js';
 import fileService from '../../services/fileService.js';
@@ -18,7 +18,7 @@ function PostForm({ post }) {
     });
 
     const navigate = useNavigate();
-    const userData = useSelector( (state) => state.user.userData );
+    const userData = useSelector( (state) => state.auth.userData );
 
     const submit = async (data) => {
         // we check , if post already exist then we update it otherwise we create a new post.
@@ -30,18 +30,18 @@ function PostForm({ post }) {
                 fileService.deleteFile( post.featuredImage );
             }
             
-            const dbPost = service.updatePost( post.$id , {
+            const dbPost = await service.updatePost( post.$id , {
                 ...data ,
-                featuredImage : file ? file.$id : undefined ,
+                featuredImage : file ? file.$id : post.featuredImage ,
             } )
 
             if( dbPost ){
-                navigate(`/post/${(await dbPost).$id}`);
+                navigate(`/post/${dbPost.$id}`);
             }
 
         }else{
             // Here we create a new post and navigate to the post page.
-            const file = data.image[0] ? await fileService.uploadFile( data.image[0] ) : null ;
+            const file = data.image[0] ? await fileService.uploadFile( data.image[0] ) : null ; 
 
             if( file ){
                 const fileId = file.$id ;
@@ -72,7 +72,7 @@ function PostForm({ post }) {
 
     React.useEffect( () => {
         const subscription = watch( (value , { name }) => {
-            if( name === "title" ){
+            if( name === "title" && value.title ){
                 const slug = slugTransform( value.title );
                 setValue("slug", slug , {shouldValidate: true});
             }
@@ -82,8 +82,17 @@ function PostForm({ post }) {
 
     } , [ watch , slugTransform ,setValue ] );
 
+    useEffect(() => {
+        if (post && post.featuredImage) {
+            console.log("previewURL:", fileService.getFilePreview(post.featuredImage));
+        }
+    }, [post]);
 
-  return (
+    console.log("post:", post);
+    console.log("featuredImage:", post?.featuredImage);
+    console.log("previewURL:", fileService.getFilePreview(post?.featuredImage));
+
+  return post ? (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
             <div className="w-2/3 px-2">
                 <Input
@@ -116,7 +125,7 @@ function PostForm({ post }) {
                     {...register("image", { required: !post })}
                 />
 
-                {post && (
+                {post && post.featuredImage && (
                     <div className="w-full mb-4">
                         <img
                             src={fileService.getFilePreview(post.featuredImage)}
@@ -140,7 +149,7 @@ function PostForm({ post }) {
             </div>
             
         </form>
-    );
+    ) : null;
 }
 
 export default PostForm

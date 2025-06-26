@@ -60,7 +60,7 @@ const router = createBrowserRouter([
       {
         path : "/edit-post/:slug",
         element : (
-          <AuthLayout authentication > // Another syntax
+          <AuthLayout authentication > 
             {" "}
             <EditPost />
           </AuthLayout>
@@ -68,7 +68,7 @@ const router = createBrowserRouter([
       },
       {
         path : "/post/:slug",
-        element : <post />,
+        element : <Post />,
       },
     
     ], 

@@ -43,15 +43,11 @@ export class FileService{
     }
 
     getFilePreview( fileId ) {
-        try{
-            return this.storage.getFilePreview(
-                conf.appwriteBucketId,
-                fileId
-            );
-        }catch(error){
-            console.error('Error while getting file preview:', error);
-            throw error;
-        }
+        return this.storage.getFilePreview(
+            conf.appwriteBucketId,
+            fileId
+        ).href; 
+        //getFilePreview method returns an URL object. You need to access the href property of that object to get the actual URL string.
     }
 }
 

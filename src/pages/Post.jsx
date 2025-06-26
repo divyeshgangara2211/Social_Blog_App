@@ -15,7 +15,7 @@ function Post() {
 
     const userData = useSelector((state) => state.auth.userData);
 
-    const isAuthor = post && userData ? post.userId === userData.Id : false ;
+    const isAuthor = post && userData ? post.userId === userData.$id : false ;
 
     useEffect( () => {
         if(slug){
@@ -32,7 +32,7 @@ function Post() {
     const deletePost = () => {
         service.deletePost(post.$id).then( (status) => {
             if( status ){
-                service.deletePost(post.featuredImage);
+                fileService.deleteFile(post.featuredImage);
                 navigate("/");
             }
         });
