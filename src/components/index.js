@@ -9,7 +9,7 @@ import Login from "./Login.jsx";
 import Button from "./Button.jsx";
 import PostForm from "./post-form/PostForm";
 import PostCard from "./PostCard.jsx";
-import Protected from "./AuthLayout.jsx";
+import AuthLayout from "./AuthLayout.jsx";
 import Input from "./Input.jsx";
 import Select from "./Select.jsx";
 
@@ -26,7 +26,7 @@ export {
     Button,
     PostForm,
     PostCard,
-    Protected, 
+    AuthLayout, 
     Input,
     Select,
 }

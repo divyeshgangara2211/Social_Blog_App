@@ -1,6 +1,7 @@
 import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-import  { Contoller } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
+
 
 function RTE({ name , control , label , defaultValue = '' }) {
   return (
