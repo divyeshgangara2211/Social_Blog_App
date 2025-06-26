@@ -25,7 +25,7 @@ function PostCard({ $id, title, featuredImage }) {
             <img
               src={imageUrl}
               alt={title || 'Post image'}
-              className='rounded-xl object-cover h-48 w-full border border-gray-700 bg-gray-900'
+              className='rounded-xl object-contain h-48 w-full border border-gray-700 bg-gray-900'
             />
           ) : (
             <span className="text-gray-500 text-lg">No image</span>

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, RTE, Select } from '../index.js';
+import conf from '../../conf/conf';
 import fileService from '../../services/fileService.js';
 import service from '../../services/config.js';
 import { useNavigate } from 'react-router-dom';
@@ -45,7 +46,7 @@ function PostForm({ post }) {
 
   useEffect(() => {
     if (post && post.featuredImage) {
-      const preview = fileService.getFileView(post.featuredImage);
+      const preview = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${post.featuredImage}/view?project=${conf.appwriteProjectId}`;
       setImagePreview(preview);
     }
   }, [post]);
@@ -86,8 +87,24 @@ function PostForm({ post }) {
     }
   };
 
-  // Only show the image if the preview URL is a real Appwrite URL (starts with http)
-  const isValidImage = imagePreview && imagePreview.startsWith('http');
+  // Update image preview when a new file is selected
+  const handleImageChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    } else if (post && post.featuredImage) {
+      // fallback to existing image if no new file selected
+      const preview = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${post.featuredImage}/view?project=${conf.appwriteProjectId}`;
+      setImagePreview(preview);
+    } else {
+      setImagePreview('');
+    }
+  };
+
+  // Only show the image if the preview URL is a real Appwrite URL (starts with http) or a local object URL (blob:)
+  const isValidImage = imagePreview && (imagePreview.startsWith('http') || imagePreview.startsWith('blob:'));
+
+  //Now, when you select a new image, the preview will immediately show the selected image—even before you update the post.
 
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap bg-gray-900 p-8 rounded-2xl shadow-lg border border-gray-800 text-white">
@@ -115,13 +132,14 @@ function PostForm({ post }) {
             type="file"
             accept="image/png, image/jpg, image/jpeg, image/gif, image/webp"
             {...register('image', { required: !post })}
+            onChange={handleImageChange}
           />
           <div className="mt-4 w-full h-48 flex items-center justify-center bg-gray-900 rounded-lg border border-gray-700">
             {isValidImage ? (
               <img
                 src={imagePreview}
                 alt={post?.title || 'Preview'}
-                className="rounded-lg object-cover w-full h-48 shadow-md border border-gray-700"
+                className="rounded-lg object-contain w-full h-44 shadow-md border border-gray-700"
               />
             ) : (
               <span className="text-gray-500 text-lg">No image selected</span>
