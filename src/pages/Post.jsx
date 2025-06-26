@@ -36,18 +36,16 @@ function Post() {
                 navigate("/");
             }
         });
-    };
+    };  
+    
+    const imageUrl = post?.featuredImage ? fileService.getFileView(post.featuredImage) : null;
+    
+    const isValidImage = imageUrl && imageUrl.startsWith('http');
 
   return post ? (
     <div className="py-8">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
-                    <img
-                        src={fileService.getFilePreview(post.featuredImage)}
-                        alt={post.title}
-                        className="rounded-xl"
-                    />
-
                     {isAuthor && (
                         <div className="absolute right-6 top-6">
                             <Link to={`/edit-post/${post.$id}`}>
@@ -64,6 +62,19 @@ function Post() {
 
                 <div className="w-full mb-6">
                     <h1 className="text-2xl font-bold">{post.title}</h1>
+                </div>
+
+                {/* Featured Image */}
+                <div className="w-full flex justify-center mb-6 relative rounded-xl overflow-hidden shadow-lg h-80 bg-gray-900 items-center">
+                    {isValidImage ? (
+                        <img
+                            src={imageUrl}
+                            alt={post.title}
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <span className="text-gray-500 text-lg">No image</span>
+                    )}
                 </div>
 
                 <div className="browser-css">

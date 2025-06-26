@@ -23,7 +23,7 @@ export class FileService{
             );
 
         } catch (error) {
-            console.error('Appwrite service :: uploadFile :: error', error);
+            console.error('Error while uploading file:', error);
             return false ;
         }
     }
@@ -37,25 +37,28 @@ export class FileService{
 
             return true ;
         }catch(error){
-            console.error('Appwrite service :: deleteFile :: error', error);
+            console.error('Error while deleting file:', error);
             return false ;
         }
     }
 
-    getFilePreview(fileId) {
-        // Files in the public directory are served at the root path, so use '/placeholder.png'
-        if (!fileId) {
-            return '/placeholder.png';
+    getFileView(fileId) {
+        if (!fileId || !conf.appwriteBucketId) {
+            return '';
         }
         try {
-            return this.storage.getFilePreview(conf.appwriteBucketId, fileId).href;
-        } catch (error) {
-            console.warn('Appwrite service :: getFilePreview :: error. Check bucket permissions.', error);
-            return '/placeholder.png';
+            const url = this.storage.getFileView(conf.appwriteBucketId, fileId);
+            return url?.href || '';
+        } catch (e) {
+            return '';
         }
         //getFilePreview method returns an URL object. 
         // You need to access the href property of that 
         // object to get the actual URL string.
+    }
+
+    getFilePreview(fileId) {
+        return this.getFileView(fileId);
     }
 }
 

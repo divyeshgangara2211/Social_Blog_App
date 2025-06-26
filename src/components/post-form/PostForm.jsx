@@ -45,9 +45,8 @@ function PostForm({ post }) {
 
   useEffect(() => {
     if (post && post.featuredImage) {
-      const preview = fileService.getFilePreview(post.featuredImage);
+      const preview = fileService.getFileView(post.featuredImage);
       setImagePreview(preview);
-      console.log('Image preview URL:', preview);
     }
   }, [post]);
 
@@ -57,7 +56,6 @@ function PostForm({ post }) {
       let file = null;
       if (data.image && data.image[0]) {
         file = await fileService.uploadFile(data.image[0]);
-        console.log('Uploaded file:', file);
       }
       // if we get file then we need to delete the old file.
       if (file) {
@@ -76,7 +74,6 @@ function PostForm({ post }) {
       let file = null;
       if (data.image && data.image[0]) {
         file = await fileService.uploadFile(data.image[0]);
-        console.log('Uploaded file:', file);
       }
       if (file) {
         data.featuredImage = file.$id;
@@ -88,6 +85,9 @@ function PostForm({ post }) {
       }
     }
   };
+
+  // Only show the image if the preview URL is a real Appwrite URL (starts with http)
+  const isValidImage = imagePreview && imagePreview.startsWith('http');
 
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap bg-gray-900 p-8 rounded-2xl shadow-lg border border-gray-800 text-white">
@@ -116,19 +116,17 @@ function PostForm({ post }) {
             accept="image/png, image/jpg, image/jpeg, image/gif, image/webp"
             {...register('image', { required: !post })}
           />
-          {imagePreview && (
-            <div className="mt-4 w-full">
+          <div className="mt-4 w-full h-48 flex items-center justify-center bg-gray-900 rounded-lg border border-gray-700">
+            {isValidImage ? (
               <img
                 src={imagePreview}
                 alt={post?.title || 'Preview'}
-                className="rounded-lg object-cover w-full h-auto shadow-md border border-gray-700"
-                onError={e => { e.target.src = '/placeholder.png'; }}
+                className="rounded-lg object-cover w-full h-48 shadow-md border border-gray-700"
               />
-              {imagePreview === '/placeholder.png' && (
-                <div className="text-xs text-red-400 mt-2">Image preview not available. Check Appwrite file upload and permissions.</div>
-              )}
-            </div>
-          )}
+            ) : (
+              <span className="text-gray-500 text-lg">No image selected</span>
+            )}
+          </div>
         </div>
         <Select
           label="Status"
