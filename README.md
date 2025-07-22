@@ -44,13 +44,25 @@
 
 - **🛠️ Easy Environment Configuration**  
   Setup with `.env` for secure and flexible deployment using Vite environment variables.
+  
 
-- **💡 Future Enhancements Planned:**  
-  - Real-time comments & notifications  
-  - User profile pages  
-  - Advanced search & filters  
-  - Social features (likes, follows)  
-  - Bookmark & draft saving  
+## 🌟 Future Enhancements
+
+🗨️ **Real-Time Comments & Notifications**  
+Enable live user interactions with instant updates and alerts.
+
+🔍 **Advanced Search & Content Discovery**  
+Implement smart filters, keyword search, and tag-based discovery.
+
+👤 **User Profiles & Social Features**  
+Allow users to build personal profiles, follow others, and engage with the community.
+
+📌 **Bookmarking & Draft Saving**  
+Users can save favorite posts and draft content before publishing.
+
+📊 **Admin Dashboard & Moderation Tools**  
+Powerful admin tools for managing content, users, and reports efficiently.
+
 
 
 ## 🛠️ Tech Stack
@@ -110,17 +122,6 @@ src/
   App.jsx          # Main app component
   main.jsx         # Entry point
 ```
-
-🌟 Future Enhancements
-
-🗨️ Real-time comments and notifications
-
-🔍 Advanced search and content discovery
-
-👥 User profiles and follower system
-
-📊 Admin dashboard for content moderation
-
 
 
 ## 📬 Contact
