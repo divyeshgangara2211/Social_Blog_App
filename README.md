@@ -61,7 +61,7 @@
 | Backend/API  | Appwrite (Cloud Auth, DB, Storage)     |
 | State Mgmt   | Redux Toolkit                          |
 | Routing      | React Router                           |
-| Deployment   | Vercel / Netlify / Custom Hosting      |
+| Deployment   | Vercel       |
 
 ---
 
@@ -114,9 +114,13 @@ src/
 🌟 Future Enhancements
 
 🗨️ Real-time comments and notifications
+
 🔍 Advanced search and content discovery
+
 👥 User profiles and follower system
+
 📊 Admin dashboard for content moderation
+
 
 
 ## 📬 Contact
